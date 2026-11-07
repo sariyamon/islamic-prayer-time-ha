@@ -1,0 +1,22 @@
+{
+  "domain": "islamic_prayer_time",
+  "name": "Islamic Prayer Time",
+  "after_dependencies": [
+    "frontend"
+  ],
+  "codeowners": [
+    "@sariyamon"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "http"
+  ],
+  "documentation": "https://github.com/sariyamon/islamic-prayer-time-ha",
+  "integration_type": "service",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/sariyamon/islamic-prayer-time-ha/issues",
+  "requirements": [
+    "prayer-times-calculator-offline==1.0.3"
+  ],
+  "version": "1.0.0"
+}

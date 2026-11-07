@@ -1,0 +1,321 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Islamic Prayer Time",
+        "description": "Set up prayer times for a location. Calculation defaults are taken from the core Islamic Prayer Times integration when it is configured (core integration: {core}).",
+        "data": {
+          "name": "Name",
+          "calculation_method": "Calculation method",
+          "school": "Asr juristic school",
+          "latitude_adjustment_method": "High-latitude adjustment",
+          "midnight_mode": "Midnight mode",
+          "use_home_location": "Use Home Assistant location",
+          "use_home_elevation": "Use Home Assistant elevation"
+        },
+        "data_description": {
+          "name": "Used as the device name, e.g. Prayer Times or Masjid.",
+          "calculation_method": "Fajr / Isha angles used. Default matches the Home Assistant core integration.",
+          "school": "Changes how Asr is calculated.",
+          "latitude_adjustment_method": "Only matters above roughly 48° latitude.",
+          "midnight_mode": "Defines the night used for Midnight and the last third.",
+          "use_home_location": "Follows the home location in Settings → System → General. Turn off to enter coordinates manually.",
+          "use_home_elevation": "Elevation lowers the horizon and moves Sunrise / Maghrib by a minute or two. Off = identical to the core integration."
+        }
+      },
+      "location": {
+        "title": "Custom location",
+        "description": "Coordinates of the mosque or city to calculate for.",
+        "data": {
+          "latitude": "Latitude",
+          "longitude": "Longitude",
+          "elevation": "Elevation"
+        },
+        "data_description": {
+          "elevation": "Metres above sea level."
+        }
+      },
+      "offsets": {
+        "title": "Time adjustments",
+        "description": "Fine-tune each time to match your local mosque timetable. These can also be changed later from the device page or a dashboard.",
+        "data": {
+          "offset_fajr": "Fajr offset",
+          "offset_sunrise": "Sunrise offset",
+          "offset_dhuhr": "Dhuhr offset",
+          "offset_asr": "Asr offset",
+          "offset_maghrib": "Maghrib offset",
+          "offset_isha": "Isha offset",
+          "offset_imsak": "Imsak offset",
+          "offset_midnight": "Midnight offset",
+          "hijri_offset": "Hijri date adjustment"
+        },
+        "data_description": {
+          "offset_fajr": "Minutes added to the calculated time (negative = earlier).",
+          "offset_sunrise": "Minutes added to the calculated time (negative = earlier).",
+          "offset_dhuhr": "Minutes added to the calculated time (negative = earlier).",
+          "offset_asr": "Minutes added to the calculated time (negative = earlier).",
+          "offset_maghrib": "Minutes added to the calculated time (negative = earlier).",
+          "offset_isha": "Minutes added to the calculated time (negative = earlier).",
+          "offset_imsak": "Minutes added to the calculated time (negative = earlier).",
+          "offset_midnight": "Minutes added to the calculated time (negative = earlier).",
+          "hijri_offset": "Days to shift the Hijri date to match local moon sighting."
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Prayer time settings",
+        "menu_options": {
+          "calculation": "Calculation method",
+          "location": "Location",
+          "offsets": "Time adjustments (+/- minutes)"
+        }
+      },
+      "calculation": {
+        "title": "Calculation method",
+        "data": {
+          "calculation_method": "Calculation method",
+          "school": "Asr juristic school",
+          "latitude_adjustment_method": "High-latitude adjustment",
+          "midnight_mode": "Midnight mode"
+        },
+        "data_description": {
+          "calculation_method": "Fajr / Isha angles used. Default matches the Home Assistant core integration.",
+          "school": "Changes how Asr is calculated.",
+          "latitude_adjustment_method": "Only matters above roughly 48° latitude.",
+          "midnight_mode": "Defines the night used for Midnight and the last third."
+        }
+      },
+      "location": {
+        "title": "Location",
+        "data": {
+          "use_home_location": "Use Home Assistant location",
+          "use_home_elevation": "Use Home Assistant elevation"
+        },
+        "data_description": {
+          "use_home_location": "Follows the home location in Settings → System → General. Turn off to enter coordinates manually.",
+          "use_home_elevation": "Elevation lowers the horizon and moves Sunrise / Maghrib by a minute or two. Off = identical to the core integration."
+        }
+      },
+      "custom_location": {
+        "title": "Custom location",
+        "data": {
+          "latitude": "Latitude",
+          "longitude": "Longitude",
+          "elevation": "Elevation"
+        },
+        "data_description": {
+          "elevation": "Metres above sea level."
+        }
+      },
+      "offsets": {
+        "title": "Time adjustments",
+        "data": {
+          "offset_fajr": "Fajr offset",
+          "offset_sunrise": "Sunrise offset",
+          "offset_dhuhr": "Dhuhr offset",
+          "offset_asr": "Asr offset",
+          "offset_maghrib": "Maghrib offset",
+          "offset_isha": "Isha offset",
+          "offset_imsak": "Imsak offset",
+          "offset_midnight": "Midnight offset",
+          "hijri_offset": "Hijri date adjustment"
+        },
+        "data_description": {
+          "offset_fajr": "Minutes added to the calculated time (negative = earlier).",
+          "offset_sunrise": "Minutes added to the calculated time (negative = earlier).",
+          "offset_dhuhr": "Minutes added to the calculated time (negative = earlier).",
+          "offset_asr": "Minutes added to the calculated time (negative = earlier).",
+          "offset_maghrib": "Minutes added to the calculated time (negative = earlier).",
+          "offset_isha": "Minutes added to the calculated time (negative = earlier).",
+          "offset_imsak": "Minutes added to the calculated time (negative = earlier).",
+          "offset_midnight": "Minutes added to the calculated time (negative = earlier).",
+          "hijri_offset": "Days to shift the Hijri date to match local moon sighting."
+        }
+      }
+    }
+  },
+  "selector": {
+    "calculation_method": {
+      "options": {
+        "karachi": "University of Islamic Sciences, Karachi",
+        "mwl": "Muslim World League",
+        "isna": "Islamic Society of North America",
+        "egypt": "Egyptian General Authority of Survey",
+        "makkah": "Umm Al-Qura University, Makkah",
+        "gulf": "Gulf Region",
+        "kuwait": "Kuwait",
+        "qatar": "Qatar",
+        "dubai": "Dubai",
+        "singapore": "Majlis Ugama Islam Singapura",
+        "jakim": "JAKIM, Malaysia",
+        "kemenag": "Kemenag, Indonesia",
+        "turkey": "Diyanet, Türkiye",
+        "russia": "Spiritual Administration of Muslims of Russia",
+        "france": "Union des Organisations Islamiques de France",
+        "tunisia": "Tunisia",
+        "algeria": "Algeria",
+        "morocco": "Morocco",
+        "portugal": "Comunidade Islamica de Lisboa",
+        "jordan": "Ministry of Awqaf, Jordan",
+        "tehran": "Institute of Geophysics, University of Tehran",
+        "jafari": "Shia Ithna-Ashari, Leva Institute, Qum",
+        "moonsighting": "Moonsighting Committee Worldwide"
+      }
+    },
+    "school": {
+      "options": {
+        "shafi": "Shafi'i, Maliki, Hanbali (standard Asr)",
+        "hanafi": "Hanafi (later Asr)"
+      }
+    },
+    "latitude_adjustment_method": {
+      "options": {
+        "middle_of_the_night": "Middle of the night",
+        "one_seventh": "One seventh of the night",
+        "angle_based": "Angle based"
+      }
+    },
+    "midnight_mode": {
+      "options": {
+        "standard": "Standard (sunset to sunrise)",
+        "jafari": "Jafari (sunset to Fajr)"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "imsak": {
+        "name": "Imsak"
+      },
+      "fajr": {
+        "name": "Fajr"
+      },
+      "sunrise": {
+        "name": "Sunrise"
+      },
+      "dhuhr": {
+        "name": "Dhuhr"
+      },
+      "asr": {
+        "name": "Asr"
+      },
+      "maghrib": {
+        "name": "Maghrib"
+      },
+      "isha": {
+        "name": "Isha"
+      },
+      "midnight": {
+        "name": "Midnight"
+      },
+      "last_third": {
+        "name": "Last third of the night"
+      },
+      "current_prayer": {
+        "name": "Current prayer",
+        "state": {
+          "fajr": "Fajr",
+          "sunrise": "Sunrise",
+          "dhuhr": "Dhuhr",
+          "asr": "Asr",
+          "maghrib": "Maghrib",
+          "isha": "Isha"
+        }
+      },
+      "next_prayer": {
+        "name": "Next prayer",
+        "state": {
+          "fajr": "Fajr",
+          "sunrise": "Sunrise",
+          "dhuhr": "Dhuhr",
+          "asr": "Asr",
+          "maghrib": "Maghrib",
+          "isha": "Isha"
+        }
+      },
+      "next_prayer_time": {
+        "name": "Next prayer time"
+      },
+      "hijri_date": {
+        "name": "Hijri date"
+      }
+    },
+    "number": {
+      "offset_fajr": {
+        "name": "Fajr offset"
+      },
+      "offset_sunrise": {
+        "name": "Sunrise offset"
+      },
+      "offset_dhuhr": {
+        "name": "Dhuhr offset"
+      },
+      "offset_asr": {
+        "name": "Asr offset"
+      },
+      "offset_maghrib": {
+        "name": "Maghrib offset"
+      },
+      "offset_isha": {
+        "name": "Isha offset"
+      },
+      "offset_imsak": {
+        "name": "Imsak offset"
+      },
+      "offset_midnight": {
+        "name": "Midnight offset"
+      },
+      "hijri_offset": {
+        "name": "Hijri date adjustment"
+      }
+    },
+    "select": {
+      "calculation_method": {
+        "name": "Calculation method",
+        "state": {
+          "karachi": "University of Islamic Sciences, Karachi",
+          "mwl": "Muslim World League",
+          "isna": "Islamic Society of North America",
+          "egypt": "Egyptian General Authority of Survey",
+          "makkah": "Umm Al-Qura University, Makkah",
+          "gulf": "Gulf Region",
+          "kuwait": "Kuwait",
+          "qatar": "Qatar",
+          "dubai": "Dubai",
+          "singapore": "Majlis Ugama Islam Singapura",
+          "jakim": "JAKIM, Malaysia",
+          "kemenag": "Kemenag, Indonesia",
+          "turkey": "Diyanet, Türkiye",
+          "russia": "Spiritual Administration of Muslims of Russia",
+          "france": "Union des Organisations Islamiques de France",
+          "tunisia": "Tunisia",
+          "algeria": "Algeria",
+          "morocco": "Morocco",
+          "portugal": "Comunidade Islamica de Lisboa",
+          "jordan": "Ministry of Awqaf, Jordan",
+          "tehran": "Institute of Geophysics, University of Tehran",
+          "jafari": "Shia Ithna-Ashari, Leva Institute, Qum",
+          "moonsighting": "Moonsighting Committee Worldwide"
+        }
+      },
+      "school": {
+        "name": "Asr school",
+        "state": {
+          "shafi": "Shafi'i, Maliki, Hanbali (standard Asr)",
+          "hanafi": "Hanafi (later Asr)"
+        }
+      },
+      "latitude_adjustment_method": {
+        "name": "High-latitude adjustment",
+        "state": {
+          "middle_of_the_night": "Middle of the night",
+          "one_seventh": "One seventh of the night",
+          "angle_based": "Angle based"
+        }
+      }
+    }
+  }
+}

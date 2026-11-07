@@ -1,0 +1,23 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  zip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stamp version
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          sed -i "s/\"version\": \".*\"/\"version\": \"${VERSION}\"/" custom_components/islamic_prayer_time/manifest.json
+      - name: Zip
+        run: cd custom_components/islamic_prayer_time && zip -r ../../islamic_prayer_time.zip .
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: islamic_prayer_time.zip
