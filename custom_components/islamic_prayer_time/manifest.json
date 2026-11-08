@@ -16,7 +16,7 @@
   "iot_class": "calculated",
   "issue_tracker": "https://github.com/sariyamon/islamic-prayer-time-ha/issues",
   "requirements": [
-    "prayer-times-calculator-offline==1.0.3"
+    "prayer-times-calculator-offline>=1.0.3"
   ],
   "version": "1.0.0"
 }

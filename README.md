@@ -202,7 +202,7 @@ The integration uses [`prayer-times-calculator-offline`](https://github.com/cpfa
 ## Development
 
 ```bash
-pip install pytest-homeassistant-custom-component prayer-times-calculator-offline==1.0.3
+pip install pytest-homeassistant-custom-component "prayer-times-calculator-offline>=1.0.3"
 pytest
 ```
 
