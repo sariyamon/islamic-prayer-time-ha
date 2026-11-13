@@ -6,7 +6,7 @@ from typing import Final
 
 DOMAIN: Final = "islamic_prayer_time"
 NAME: Final = "Islamic Prayer Time"
-VERSION: Final = "1.0.0"
+VERSION: Final = "1.0.1"
 
 # ---------------------------------------------------------------------------
 # Config / option keys

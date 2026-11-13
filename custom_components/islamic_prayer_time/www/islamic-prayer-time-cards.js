@@ -14,7 +14,7 @@
  * MIT licence.
  */
 
-const VERSION = "1.0.0";
+const VERSION = "1.0.1";
 const DOMAIN = "islamic_prayer_time";
 const CORE_DOMAIN = "islamic_prayer_times";
 const PRAYERS = ["fajr", "sunrise", "dhuhr", "asr", "maghrib", "isha"];
@@ -395,27 +395,42 @@ class PrayerTimesCard extends PrayerCardBase {
 
   css() {
     return `
-      ha-card { padding: 12px 12px 14px; }
+      ha-card { padding: 12px 12px 14px; container: ipt-tiles / inline-size; }
       .head { display:flex; align-items:center; gap:8px; padding:4px 4px 12px; color:var(--secondary-text-color); }
       .head ha-icon { --mdc-icon-size:22px; color:var(--secondary-text-color); }
       .head .title { font-size:16px; font-weight:500; flex:1; }
       .chip { display:inline-flex; align-items:center; gap:4px; font-size:14px; color:var(--primary-text-color); }
       .chip ha-icon { --mdc-icon-size:18px; color:var(--ipt-accent); }
       .grid { display:grid; grid-template-columns: repeat(var(--cols), minmax(0,1fr)); gap:8px; }
-      .tile { border:1px solid var(--divider-color); border-radius: var(--ha-card-border-radius, 12px);
-        background: var(--card-background-color); padding:16px 6px 14px; text-align:center;
+      /* More than three columns only fits on a wide card; on a phone fall back to two rows of three. */
+      @container ipt-tiles (max-width: 560px) {
+        .grid.wide { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      }
+      .tile { position:relative; min-width:0; box-sizing:border-box; container-type: inline-size;
+        border:1px solid var(--divider-color); border-radius: var(--ha-card-border-radius, 12px);
+        background: var(--card-background-color); padding:16px 4px 14px; text-align:center;
         display:flex; flex-direction:column; align-items:center; gap:6px; transition: border-color .2s; }
       .tile ha-icon { --mdc-icon-size:28px; color: var(--disabled-text-color, #9e9e9e); }
+      .tile .n, .tile .v { max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.25; }
       .tile .n { font-size:15px; font-weight:500; color:var(--primary-text-color); }
       .tile .v { font-size:14px; color:var(--secondary-text-color); }
+      /* Narrow tiles (wide layouts on tablets): smaller text, AM/PM under the time. */
+      @container (max-width: 92px) {
+        .tile ha-icon { --mdc-icon-size:24px; }
+        .tile .n { font-size:13px; }
+        .tile .v { font-size:13px; white-space:normal; }
+        .tile .v .ap { display:block; margin:1px 0 0; }
+      }
       .tile.past .n, .tile.past .v { opacity:.7; }
       .tile.now { border-color: var(--ipt-accent); background:
         color-mix(in srgb, var(--ipt-accent) 9%, var(--card-background-color)); }
       .tile.now ha-icon { color: var(--ipt-accent); }
       .tile.now .v { color: var(--primary-text-color); font-weight:500; }
-      .badge { font-size:11px; font-weight:600; padding:1px 7px; border-radius:9px;
-        background: var(--ipt-accent); color: #fff; margin-left:4px; vertical-align:2px; }
-      .foot { display:flex; align-items:center; gap:10px; padding:12px 4px 0; font-size:13px; color:var(--secondary-text-color); }
+      .badge { position:absolute; top:6px; right:6px; font-size:10px; font-weight:600; line-height:16px;
+        padding:0 6px; border-radius:8px; background: var(--ipt-accent); color: #fff; }
+      @container (max-width: 92px) { .badge { top:5px; right:5px; padding:0 5px; font-size:9.5px; } }
+      .foot { display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; padding:12px 4px 0; font-size:13px; color:var(--secondary-text-color); }
+      .foot .bar { min-width:48px; }
       .foot b { color: var(--primary-text-color); font-weight:500; }
       .bar { flex:1; height:4px; border-radius:2px; background: var(--divider-color); overflow:hidden; }
       .bar i { display:block; height:100%; width: var(--p); background: var(--ipt-accent); border-radius:2px; }
@@ -430,7 +445,8 @@ class PrayerTimesCard extends PrayerCardBase {
       const past = !isNow && m.times[p] && m.times[p] < new Date() ;
       return `<div class="tile ${isNow ? "now" : past ? "past" : ""}" ${this.attrs(m, p)}>
         <ha-icon icon="${ICONS[p]}"></ha-icon>
-        <div class="n">${escapeHtml(label(c, p))}${isNow ? `<span class="badge">Now</span>` : ""}</div>
+        ${isNow ? `<span class="badge">Now</span>` : ""}
+        <div class="n">${escapeHtml(label(c, p))}</div>
         <div class="v num">${this.t(m.times[p])}</div>
       </div>`;
     }).join("");
@@ -438,7 +454,7 @@ class PrayerTimesCard extends PrayerCardBase {
     return `<ha-card style="--ipt-accent:${accent}; --cols:${cols}">
       ${c.title !== "" ? `<div class="head"><ha-icon icon="mdi:mosque"></ha-icon><span class="title">${escapeHtml(c.title)}</span>
         <span class="chip"><ha-icon icon="mdi:clock-star-four-points-outline"></ha-icon>${escapeHtml(label(c, r.current))}</span></div>` : ""}
-      <div class="grid">${tiles}</div>
+      <div class="grid ${cols > 3 ? "wide" : ""}">${tiles}</div>
       ${c.show_footer ? `<div class="foot"><span><b>${escapeHtml(label(c, r.next))}</b> <span data-remaining>${formatRemaining(r.remaining)}</span></span>
         <span class="bar" data-progress style="--p:${(r.progress * 100).toFixed(2)}%"><i></i></span>
         ${c.show_hijri && m.hijri ? `<span>${escapeHtml(m.hijri)}</span>` : ""}</div>` : ""}
@@ -529,7 +545,9 @@ class LanternGlowCard extends PrayerCardBase {
       .rem { font-size:14px; color:${C.lamp}; margin-top:2px; }
       .hijri { font-size:12.5px; opacity:.7; margin-top:8px; }
       .strip { display:grid; grid-template-columns: repeat(var(--n), minmax(0,1fr)); gap:4px; padding:10px 12px 14px; }
-      .cell { text-align:center; padding:8px 2px; border-radius:10px; font-size:12.5px; }
+      .cell { text-align:center; padding:8px 2px; border-radius:10px; font-size:12.5px; min-width:0; container-type:inline-size; }
+      .cell .n, .cell .v { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+      @container (max-width: 64px) { .cell .n { font-size:11.5px; } .cell .v { font-size:13px; } .cell .v .ap { display:block; margin:0; } }
       .cell .n { opacity:.75; }
       .cell .v { font-size:14px; margin-top:2px; }
       .cell.past { opacity:.5; }
@@ -595,7 +613,9 @@ class LanternNightCard extends PrayerCardBase {
       .garland { position:relative; height:16px; margin: 6px 0 0; }
       .garland svg { position:absolute; inset:0; width:100%; height:24px; overflow:visible; }
       .row { display:grid; grid-template-columns: repeat(var(--n), minmax(0,1fr)); padding: 0 6px 16px; }
-      .col { display:flex; flex-direction:column; align-items:center; text-align:center; padding:0 2px; border-radius:12px; }
+      .col { display:flex; flex-direction:column; align-items:center; text-align:center; padding:0 2px; border-radius:12px; min-width:0; container-type:inline-size; }
+      .col .n, .col .v { max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+      @container (max-width: 64px) { .col .n { font-size:11.5px; } .col .v { font-size:13.5px; } .col .v .ap { display:block; margin:0; } .col .ar { font-size:13px; } }
       .col .cord { width:1px; background:${C.brass}; opacity:.7; }
       .col .lantern { display:block; }
       .col.now .lantern { filter: drop-shadow(0 0 12px rgba(255,181,71,.7)); transform-origin:50% 0; animation: sway 6s ease-in-out infinite; }
